@@ -13,7 +13,7 @@
 (define (agregar-elemento-final elemento lista)
   (append lista elemento))
 
-;f(x) si se repite en una lista
+;f(x) si sse repite en una lista
 (define (repite-en-lista numero lista)
   (cond
     [(null? lista) (append lista numero)]
@@ -145,34 +145,4 @@ f13
 ;(define s0 (system “NewSystem” 0))
 ;alternativamente podría usarse:
 ;(define s1 (system “NewSystem” cb11))
-
-(define (system name InitialChatbotCodeLink . chatbot)
-  (list (current-seconds) name InitialChatbotCodeLink chatbot))
-
-(define s0 (system "NewSystem" 0 cb10 cb11 cb12 cb10 cb11 cb12))
-(display "s0") s0
-(define s1 (system "NewSystem" cb10))
-(display "s1") s1
-
-;TDA system - modificador: Función modificadora para añadir chatbots a un sistema.
-;Nombre función: system-add-chatbot
-;No usar recursividad
-;Debe verificar que el chatbot no exista en el sistema a partir del id de éste.
-;Dominio: system X chatbot
-;Recorrido: system
-
-;Ejemplo de uso
-;añadiendo un chatbot al sistema.
-;el resultado alcanzado en s1 es equivalente al ilustrado en s1 de la función 7.
-;(define s1 (system-add-chatbot s0 cb11))
-
-(define (get-id-cb lista-id-cb)
-  (car lista-id-cb))
-
-
-(define (get-it-cb-system system)
-  (map get-id-cb (cadddr system)))
-
-(define s2 (get-it-cb-system s0))
-(display "s2") s2
 
