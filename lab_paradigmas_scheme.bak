@@ -13,7 +13,7 @@
 (define (agregar-elemento-final elemento lista)
   (append lista elemento))
 
-;f(x) si sse repite en una lista
+;f(x) si se repite en una lista
 (define (repite-en-lista numero lista)
   (cond
     [(null? lista) (append lista numero)]
@@ -40,21 +40,21 @@
 (define lista-id-options (list))
 ;;TDA Option - constructor
 ;Nombre función: option
-;Dominio: code (Int)  X message (String)  X ChatbotCodeLink (Int) X FlowCodeLink (Int) X Keyword* (en referencia a 0 o más palabras claves)
+;Dominio: code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword* (en referencia a 0 o más palabras claves)
 ;Recorrido: option(lista)
 (define (option code message ChatbotCodeLink InitialFlowCodeLink . keyword)
   (list code message ChatbotCodeLink InitialFlowCodeLink keyword))
-(define op1 (option 0 "hola1" 0 1))
-(define op2 (option 0 "hola2" 0 2 "key1"))
-(define op3 (option 0 "hola3" 0 3 "key1" "key2"))
-(display "op1")
-op1
-(display "op2")
-op2
-(display "op3")
-op3
 
+(display "(option code message ChatbotCodeLink InitialFlowCodeLink . keyword)")
+(newline)
+(define op1 (option 1 "m1" 0 0))
+(define op2 (option 2 "m2" 0 0 "k2"))
+(define op3 (option 3 "m3" 0 0 "k2" "k3"))
+(display "op1") op1
+(display "op2") op2
+(display "op3") op3
 
+(newline)
 (define lista-id-flows (list))
 ;TDA Flow - constructor
 ;Nombre función: flow
@@ -66,22 +66,24 @@ op3
 ;alternativamente podría usarse:
 ;(define f12 (flow 1 “Flujo1” op1 op2))
 ;(define (flow id nombre-flujo keyword))
+
+(define (verificacion-duplicados-agregar lista-options)
+  (cond
+    [(null? lista-options) '()] 
+    [else (cons (car lista-options)
+                (verificacion-duplicados-agregar (filter (lambda(x) (not (equal? (car lista-options) x))) (cdr lista-options))))]))
+
 (define (flow id name . options)
-  (list  (+ (+ id (apply + (map cadddr options))) 1) name options)
-  ;(repite-en-lista (+ (+ id (apply + (map cadddr options))) 1) lista-id-flows)
-  )
-(define f10 (flow 1 "Flujo1"))
-(define f12 (flow 1 "Flujo1" op1 op2))
-(display "f10")
-f10
+  (list id name (verificacion-duplicados-agregar options)))
+
+(display "(flow id name . options)")
+(newline)
+(define f10 (flow 0 "Flujo1"))
+(define f12 (flow 2 "Flujo1" op1))
+(display "f10") f10
 (display "f12") f12
 
-(define (flow2 id name . options)
-  (list  (+ (+ id (sumar-all-posiciones 4 options)) 1) name options)
-         (repite-en-lista (+ (+ id (sumar-all-posiciones 4 options)) 1) lista-id-flows))
-
-
-
+(newline)
 ;Nombre función: flow-add-option
 ;La función también verifica que las opciones añadidas no se repitan en base al id de éstos.
 ;Dominio: flow X option
@@ -92,15 +94,27 @@ f10
 ;el resultado alcanzado en f12 es equivalente al ilustrado en f12 de la función 3.
 ;(define f11 (flow-add-option f10 op1))
 ;(define f12 (flow-add-option f11 op2))
-(define (flow-add-option flow-n . option-n)  
-  (list (+ (car flow-n) 1)  (cadr flow-n) (append (caddr flow-n) option-n)))
-(define f11 (flow-add-option f10 op1))
+
+
+
+(define (agregar-con-verificacion option lista)
+  (if (not (member option lista)) (cons option lista)
+      lista))
+
+
+(define (flow-add-option flow-n . option-n) 
+  (list (car flow-n) 
+        (cadr flow-n) 
+        (verificacion-duplicados-agregar option-n)))
+
+(display "(flow-add-option flow-n . option-n)")
+(newline)
+(define f11 (flow-add-option f12 op2))
 (display "f11") f11
-(define f13 (flow-add-option f12 op1 op2 op3))
-(display "f13")
-f13
+(define f13 (flow-add-option f12 op1 op2))
+(display "f13") f13
 
-
+(newline)
 ;Nombre función: chatbot
 ;Dominio: chatbotID (int) X name (String) X welcomeMessage (String) X startFlowId(int) X  flows* (indicando que puede recibir 0 o más flujos)
 ;Recorrido: chatbot
@@ -111,13 +125,16 @@ f13
 ;alternativamente podría usarse:
 ;(define cb11  (chatbot 0 “Asistente” “Bienvenido\n¿Qué te gustaría hacer?”  1 f12))
 (define (chatbot chatbotID name welcomeMessage startFlowId . flows)
-  (list (+ 1 (+ chatbotID (apply + (map car flows)))) name welcomeMessage startFlowId flows))
-(define cb10 (chatbot 0 "Asistente" "Bienvenido\n¿Qué te gustaría hacer?" 1))
-(define cb11  (chatbot 0 "Asistente" "Bienvenido\n¿Qué te gustaría hacer?"  1 f10))
+  (list chatbotID name welcomeMessage startFlowId (verificacion-duplicados-agregar flows)))
+
+(display "(chatbot chatbotID name welcomeMessage startFlowId . flows)")
+(newline)
+(define cb10 (chatbot 0 "name10" "mss" 1))
+(define cb11  (chatbot 1 "name11" "mss"  1 f10 f11 f10))
 (display "cb10") cb10
 (display "cb11") cb11
 
-
+(newline)
 ;TDA chatbot - modificador. Función modificadora para añadir flujos a un chatbot.
 ;Nombre función: chatbot-add-flow
 ;*Usar recursión de cola o natural para añadir flujos al final de la lista de flujos.
@@ -128,12 +145,16 @@ f13
 ;añadiendo flujo a un chatbot
 ;el resultado alcanzado en cb11 es equivalente al ilustrado en cb11 de la función 5.
 ;(define cb11 (chatbot-add-flow cb10 f12))
-(define (chatbot-add-flow chatbot flow)
-  (list (+ 1 (car chatbot)) (cadr chatbot) (caddr chatbot) (cadddr chatbot) (cons flow (car (reverse chatbot)))))
-(define cb12 (chatbot-add-flow cb10 f12))
+(define (chatbot-add-flow chatbot . flows)
+  (list (car chatbot) (cadr chatbot) (caddr chatbot) (cadddr chatbot) (verificacion-duplicados-agregar flows)))
+
+
+(display "(chatbot-add-flow chatbot flow)")
+(newline)
+(define cb12 (chatbot-add-flow cb11 f11))
 (display "cb12") cb12
 
-
+(newline)
 ;TDA system - constructor. Función constructora de un sistema de chatbots. Deja registro de la fecha de creación.
 ;Nombre función: system
 ;*El sistema además de contener los distintos chatbots, también contiene el chatHistory de cada usuario que interactúa con el sistema. Sobre el chatHistory, éste corresponde al registro completo del diálogo entre usuario y cada uno de los chatbots con los que interactúa. El historial se mantiene para cada usuario y debe tener el String formateado de cada mensaje del usuario y chatbot (para luego ser visualizado con la función display), fecha, hora y emisor (usuario o sistema).
@@ -146,3 +167,53 @@ f13
 ;alternativamente podría usarse:
 ;(define s1 (system “NewSystem” cb11))
 
+(define (system name InitialChatbotCodeLink . chatbot)
+  (list (current-seconds) name InitialChatbotCodeLink chatbot))
+
+(display "(system name InitialChatbotCodeLink . chatbot)")
+(newline)
+(define s0 (system "NewSystem" 0 cb10 cb11 cb12 cb10 cb11 cb12))
+(display "s0") s0
+(define s1 (system "NewSystem" cb10))
+(display "s1") s1
+
+(newline)
+;TDA system - modificador: Función modificadora para añadir chatbots a un sistema.
+;Nombre función: system-add-chatbot
+;No usar recursividad
+;Debe verificar que el chatbot no exista en el sistema a partir del id de éste.
+;Dominio: system X chatbot
+;Recorrido: system
+
+;Ejemplo de uso
+;añadiendo un chatbot al sistema.
+;el resultado alcanzado en e1 es equivalente al ilustrado en s1 de la función 7.
+;(define s1 (system-add-chatbot s0 cb11))
+
+(define (get-id-cb lista-cb)
+  (car lista-cb))
+
+
+(define (get-it-cb-system system)
+  (map get-id-cb (cadddr system)))
+
+(define s2 (get-it-cb-system s0))
+(display "s2") s2
+
+
+
+
+;(define (system-add-chatbot system chatbot)
+ ; (cond
+  ;  [if (filter (= (car chatbot) (get-it-cb-system system))) #f]
+   ; [cons chatbot (cadddr system)]))
+(define op11 (option  1 "1) Viajar" 2 1 "viajar" "turistear" "conocer"))
+(define op22 (option  2 "2) Estudiar" 3 1 "estudiar" "aprender" "perfeccionarme"))
+(define f1010 (flow 1 "flujo1" op1 op2 op2 op2 op2 op1)) ;solo añade una ocurrencia de op2
+(define f1111 (flow-add-option f10 op1)) ;se intenta añadir opción duplicada
+(define cb00 (chatbot 0 "Inicial" "Bienvenido\n¿Qué te gustaría hacer?" 1 f10 f10 f10 f10))  ;solo añade una ocurrencia de f10
+op11
+op22
+f1010
+f1111
+cb00

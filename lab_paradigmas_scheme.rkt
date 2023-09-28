@@ -203,6 +203,63 @@
 
 
 
+
+
+;Nombre función: system-add-chatbot
+;No usar recursividad
+;Debe verificar que el chatbot no exista en el sistema a partir del id de éste.
+;Dominio: system X chatbot
+;Recorrido: system
+
+;Ejemplo de uso
+;añadiendo un chatbot al sistema.
+;el resultado alcanzado en s1 es equivalente al ilustrado en s1 de la función 7.
+;(define s1 (system-add-chatbot s0 cb11))
+
+(define (system-add-chatbot system chatbot)
+  (list (car system) (cadr system) (caddr system) (verificacion-duplicados-agregar chatbot)))
+
+
+(define s11 (system-add-chatbot s0 cb11))
+(display "s11")s11
+
+
+
+
+;Nombre función: system-add-user
+;Requisitos de implementación
+;Debe verificar que el usuario no exista en el sistema a partir del id de éste, que está dado por su nombre de usuario (String).
+;Dominio: system X user (string)
+;Recorrido: system
+
+;Ejemplo de uso
+;añadiendo dos usuarios al sistema
+;(define s2 (system-add-user s1 “user0”))
+;(define s3 (system-add-user s2 “user1”))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ;(define (system-add-chatbot system chatbot)
  ; (cond
   ;  [if (filter (= (car chatbot) (get-it-cb-system system))) #f]
