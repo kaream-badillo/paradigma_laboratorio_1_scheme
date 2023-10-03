@@ -8,10 +8,21 @@
   (display lista)
   (newline))
 ;esto esta de más
-(define (agregar-elemento-inicio elemento lista)
+(define (add-elemento-inicio elemento lista)
   (cons elemento lista))
-(define (agregar-elemento-final elemento lista)
-  (append lista elemento))
+(define (add-elemento-final elemento lista)
+  (append (list elemento) lista))
+
+;comprobar elmento en lista y agregar
+(define (comprobar-add-elemento-lista elemento lista)
+  (if (not (member elemento lista))
+      (cons elemento lista)
+      lista))
+
+(define lista1 (list 1 2 3 4 5 6 7))
+(define prueba (comprobar-add-elemento-lista 4 lista1))
+(display "prueba")prueba
+
 
 ;f(x) si se repite en una lista
 (define (repite-en-lista numero lista)
@@ -33,26 +44,56 @@
 (define (sumar-all-posiciones posicion lista)
   (apply + (map (posicion-lista posicion lista))))
 
+;crear lista de id
+(define (get-id-posicion1 lista)
+  (car lista))
+
+
 ;-----------------------------------
 
 
 
-(define lista-id-options (list))
+
+
+
 ;;TDA Option - constructor
 ;Nombre función: option
 ;Dominio: code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword* (en referencia a 0 o más palabras claves)
 ;Recorrido: option(lista)
+
+
+
+
+
+;*extra. Creacion de lista de opciones para saber si se repite su id
+(define lista-id-options '(2 3))
+
+(define (add-code id lista)
+  (if (not (member id lista))
+      (cons id lista)
+      lista))
+
 (define (option code message ChatbotCodeLink InitialFlowCodeLink . keyword)
+  (add-code code lista-id-options)
   (list code message ChatbotCodeLink InitialFlowCodeLink keyword))
+      
 
 (display "(option code message ChatbotCodeLink InitialFlowCodeLink . keyword)")
 (newline)
 (define op1 (option 1 "m1" 0 0))
+(display "lista-id-options ")
+(display lista-id-options)
+(newline)
+(newline)
 (define op2 (option 2 "m2" 0 0 "k2"))
 (define op3 (option 3 "m3" 0 0 "k2" "k3"))
 (display "op1") op1
 (display "op2") op2
 (display "op3") op3
+(display "lista-id-options") lista-id-options
+
+
+
 
 (newline)
 (define lista-id-flows (list))
@@ -113,6 +154,12 @@
 (display "f11") f11
 (define f13 (flow-add-option f12 op1 op2))
 (display "f13") f13
+
+;(define lista-opciones-id(caddr f13))
+;(define lista-id (lista-get-id-posicion1 (caddr f13)))
+;(display "lista-id")lista-id
+
+
 
 (newline)
 ;Nombre función: chatbot
