@@ -51,11 +51,6 @@
 
 ;-----------------------------------
 
-
-
-
-
-
 ;;TDA Option - constructor
 ;Nombre función: option
 ;Dominio: code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword* (en referencia a 0 o más palabras claves)
