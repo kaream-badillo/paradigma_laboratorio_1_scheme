@@ -4,4 +4,3 @@
 0.5: Implementación con funcionamiento irregular (funciona 50% de las veces)
 0.75: Implementación con problemas menores (funciona 75% de las veces)
 1: Implementación completa sin problemas (funciona 100% de las veces)
-cmdms
