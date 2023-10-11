@@ -7,7 +7,7 @@
   (newline)
   (display lista)
   (newline))
-;esto esta de más
+;Agregar elemento al inicio y al final de una lista
 (define (add-elemento-inicio elemento lista)
   (cons elemento lista))
 (define (add-elemento-final elemento lista)
@@ -19,9 +19,6 @@
       (cons elemento lista)
       lista))
 
-(define lista1 (list 1 2 3 4 5 6 7))
-(define prueba (comprobar-add-elemento-lista 4 lista1))
-(display "prueba")prueba
 
 
 ;f(x) si se repite en una lista
@@ -31,6 +28,17 @@
     [(= numero (car lista)) "ya existe id"]
     [else (cons (car lista) (repite-en-lista numero (cdr lista)))]))
 
+(define (verificacion-duplicados-agregar lista-options)
+  (cond
+    [(null? lista-options) '()] 
+    [else (cons (car lista-options)
+                (verificacion-duplicados-agregar (filter (lambda (x) (not (equal? (car lista-options) x))) (cdr lista-options))))]))
+
+(define (get-id-cb lista-cb)
+  (car lista-cb))
+
+(define (get-it-cb-system system)
+  (map get-id-cb (cadddr system)))
 ;funcion elegir posicion en una lista
 (define (posicion-lista posicion lista)
   (define (posicion-lista-aux posicion lista contador)
@@ -103,12 +111,6 @@
 ;(define f12 (flow 1 “Flujo1” op1 op2))
 ;(define (flow id nombre-flujo keyword))
 
-(define (verificacion-duplicados-agregar lista-options)
-  (cond
-    [(null? lista-options) '()] 
-    [else (cons (car lista-options)
-                (verificacion-duplicados-agregar (filter (lambda(x) (not (equal? (car lista-options) x))) (cdr lista-options))))]))
-
 (define (flow id name . options)
   (list id name (verificacion-duplicados-agregar options)))
 
@@ -136,12 +138,13 @@
 (define (agregar-con-verificacion option lista)
   (if (not (member option lista)) (cons option lista)
       lista))
-
+(define f3-modificado )
 
 (define (flow-add-option flow-n . option-n) 
   (list (car flow-n) 
         (cadr flow-n) 
         (verificacion-duplicados-agregar option-n)))
+
 
 (display "(flow-add-option flow-n . option-n)")
 (newline)
@@ -232,12 +235,9 @@
 ;el resultado alcanzado en e1 es equivalente al ilustrado en s1 de la función 7.
 ;(define s1 (system-add-chatbot s0 cb11))
 
-(define (get-id-cb lista-cb)
-  (car lista-cb))
 
 
-(define (get-it-cb-system system)
-  (map get-id-cb (cadddr system)))
+
 
 (define s2 (get-it-cb-system s0))
 (display "s2") s2

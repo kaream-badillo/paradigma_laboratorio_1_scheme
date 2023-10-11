@@ -1,0 +1,37 @@
+Lista completa de todos los requerimientos  funcionales y no funcionales señalando una evaluación para cada uno según la siguiente escala:
+0: No realizado.
+0.25: Implementación con problemas mayores (funciona 25% de las veces o no funciona)
+0.5: Implementación con funcionamiento irregular (funciona 50% de las veces)
+0.75: Implementación con problemas menores (funciona 75% de las veces)
+1: Implementación completa sin problemas (funciona 100% de las veces)
+--------------------------------------------------------------------------------------------------------
+REQUERIMIENTOS NO FUNCIONALES
+
+Autoevaluación: 1 
+Lenguaje: 1
+Standard: 1 
+No variables:1
+Documentación: 1
+Dominio y Recorrido: 1
+Organización: 0.5
+Historial: 0.75
+Script de pruebas: 1
+Prerrequisitos: 0.5
+
+REQUERIMIENTOS FUNCIONALES
+0.5 	TDAs Especificar e implementar abstracciones apropiadas para el problema
+1	TDA Option - constructor
+1	TDA Option - constructor
+1	TDA Flow - constructor
+1	TDA Flow - modificador
+1	TDA Chatbot - constructor
+1	TDA Chatbot - modificador (añadir flujos)
+1	TDA System - constructor
+1	TDA System - modificador (añadir chatbots)
+0	TDA System - modificador (añadir usuarios)
+0	TDA System - función iniciar sesión
+0	TDA System - función cerrar sesión
+0	Función system-talk-rec
+0	Función system-talk-norec
+0	Función system-synthesis:
+0	Función system-simulate:

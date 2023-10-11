@@ -7,11 +7,19 @@
   (newline)
   (display lista)
   (newline))
-;esto esta de más
-(define (agregar-elemento-inicio elemento lista)
+;Agregar elemento al inicio y al final de una lista
+(define (add-elemento-inicio elemento lista)
   (cons elemento lista))
-(define (agregar-elemento-final elemento lista)
-  (append lista elemento))
+(define (add-elemento-final elemento lista)
+  (append (list elemento) lista))
+
+;comprobar elmento en lista y agregar
+(define (comprobar-add-elemento-lista elemento lista)
+  (if (not (member elemento lista))
+      (cons elemento lista)
+      lista))
+
+
 
 ;f(x) si se repite en una lista
 (define (repite-en-lista numero lista)
@@ -20,6 +28,17 @@
     [(= numero (car lista)) "ya existe id"]
     [else (cons (car lista) (repite-en-lista numero (cdr lista)))]))
 
+(define (verificacion-duplicados-agregar lista-options)
+  (cond
+    [(null? lista-options) '()] 
+    [else (cons (car lista-options)
+                (verificacion-duplicados-agregar (filter (lambda (x) (not (equal? (car lista-options) x))) (cdr lista-options))))]))
+
+(define (get-id-cb lista-cb)
+  (car lista-cb))
+
+(define (get-it-cb-system system)
+  (map get-id-cb (cadddr system)))
 ;funcion elegir posicion en una lista
 (define (posicion-lista posicion lista)
   (define (posicion-lista-aux posicion lista contador)
@@ -33,26 +52,51 @@
 (define (sumar-all-posiciones posicion lista)
   (apply + (map (posicion-lista posicion lista))))
 
+;crear lista de id
+(define (get-id-posicion1 lista)
+  (car lista))
+
+
 ;-----------------------------------
 
-
-
-(define lista-id-options (list))
 ;;TDA Option - constructor
 ;Nombre función: option
 ;Dominio: code (Int)  X message (String)  X ChatbotCodeLink (Int) X InitialFlowCodeLink (Int) X Keyword* (en referencia a 0 o más palabras claves)
 ;Recorrido: option(lista)
+
+
+
+
+
+;*extra. Creacion de lista de opciones para saber si se repite su id
+(define lista-id-options '(2 3))
+
+(define (add-code id lista)
+  (if (not (member id lista))
+      (cons id lista)
+      lista))
+
 (define (option code message ChatbotCodeLink InitialFlowCodeLink . keyword)
+  (add-code code lista-id-options)
   (list code message ChatbotCodeLink InitialFlowCodeLink keyword))
+      
 
 (display "(option code message ChatbotCodeLink InitialFlowCodeLink . keyword)")
 (newline)
 (define op1 (option 1 "m1" 0 0))
+(display "lista-id-options ")
+(display lista-id-options)
+(newline)
+(newline)
 (define op2 (option 2 "m2" 0 0 "k2"))
 (define op3 (option 3 "m3" 0 0 "k2" "k3"))
 (display "op1") op1
 (display "op2") op2
 (display "op3") op3
+(display "lista-id-options") lista-id-options
+
+
+
 
 (newline)
 (define lista-id-flows (list))
@@ -66,12 +110,6 @@
 ;alternativamente podría usarse:
 ;(define f12 (flow 1 “Flujo1” op1 op2))
 ;(define (flow id nombre-flujo keyword))
-
-(define (verificacion-duplicados-agregar lista-options)
-  (cond
-    [(null? lista-options) '()] 
-    [else (cons (car lista-options)
-                (verificacion-duplicados-agregar (filter (lambda(x) (not (equal? (car lista-options) x))) (cdr lista-options))))]))
 
 (define (flow id name . options)
   (list id name (verificacion-duplicados-agregar options)))
@@ -100,12 +138,13 @@
 (define (agregar-con-verificacion option lista)
   (if (not (member option lista)) (cons option lista)
       lista))
-
+(define f3-modificado )
 
 (define (flow-add-option flow-n . option-n) 
   (list (car flow-n) 
         (cadr flow-n) 
         (verificacion-duplicados-agregar option-n)))
+
 
 (display "(flow-add-option flow-n . option-n)")
 (newline)
@@ -113,6 +152,12 @@
 (display "f11") f11
 (define f13 (flow-add-option f12 op1 op2))
 (display "f13") f13
+
+;(define lista-opciones-id(caddr f13))
+;(define lista-id (lista-get-id-posicion1 (caddr f13)))
+;(display "lista-id")lista-id
+
+
 
 (newline)
 ;Nombre función: chatbot
@@ -190,15 +235,69 @@
 ;el resultado alcanzado en e1 es equivalente al ilustrado en s1 de la función 7.
 ;(define s1 (system-add-chatbot s0 cb11))
 
-(define (get-id-cb lista-cb)
-  (car lista-cb))
 
 
-(define (get-it-cb-system system)
-  (map get-id-cb (cadddr system)))
+
 
 (define s2 (get-it-cb-system s0))
 (display "s2") s2
+
+
+
+
+
+
+;Nombre función: system-add-chatbot
+;No usar recursividad
+;Debe verificar que el chatbot no exista en el sistema a partir del id de éste.
+;Dominio: system X chatbot
+;Recorrido: system
+
+;Ejemplo de uso
+;añadiendo un chatbot al sistema.
+;el resultado alcanzado en s1 es equivalente al ilustrado en s1 de la función 7.
+;(define s1 (system-add-chatbot s0 cb11))
+
+(define (system-add-chatbot system chatbot)
+  (list (car system) (cadr system) (caddr system) (verificacion-duplicados-agregar chatbot)))
+
+
+(define s11 (system-add-chatbot s0 cb11))
+(display "s11")s11
+
+
+
+
+;Nombre función: system-add-user
+;Requisitos de implementación
+;Debe verificar que el usuario no exista en el sistema a partir del id de éste, que está dado por su nombre de usuario (String).
+;Dominio: system X user (string)
+;Recorrido: system
+
+;Ejemplo de uso
+;añadiendo dos usuarios al sistema
+;(define s2 (system-add-user s1 “user0”))
+;(define s3 (system-add-user s2 “user1”))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
